@@ -297,9 +297,19 @@ m_right:
 
 ; --- [מנגנון פסילה עצמית] ---
 check_game_over:
+	cmp [snake_x], 0
+    jl exit_program          ; left border crossed
+    cmp [snake_x], 320
+    jge exit_program         ; right border crossed
+
+    cmp [snake_y], 0
+    jl exit_program         
+    cmp [snake_y], 200
+    jge exit_program  
+	
     mov cx, [snake_len]   
-    dec cx                ; לא בודקים את הראש מול עצמו
-    jz back_to_loop       ; אם האורך הוא 1, אין סיכוי להתנגשות
+    dec cx                
+    jz back_to_loop
     
     mov si, 2             ; התחלה מהאיבר השני בגוף
 
