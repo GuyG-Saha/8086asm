@@ -190,16 +190,17 @@ game_loop:
     call drawSnake        
     call drawApple        
 
-    ; לולאת השהייה (כדי שהנחש ירוץ במהירות סבירה)
-    mov cx, 5             
-delay_outer:
-    push cx
-    mov cx, 0ffffh
-delay_inner:
-    nop
-    loop delay_inner
-    pop cx
-    loop delay_outer
+; === השהייה מבוססת תקתוקי שעון (BIOS Ticks) ===
+    mov ah, 00h
+    int 1Ah              ; קריאת השעון -> מספר התקתוקים הנוכחי נכנס ל-DX
+    mov bx, dx           ; שמירת הזמן הנוכחי ב-BX
+    add bx, 3            ; כמה תקתוקים לחכות?
+	
+delay_loop:
+    mov ah, 00h
+    int 1Ah              ; קריאה חוזרת של השעון
+    cmp dx, bx           ; האם הגענו לזמן היעד שקבענו ב-BX?
+    jb delay_loop        ; אם DX עדיין קטן מ-BX, המשך להמתין בלולאה
 
     ; בדיקת מקלדת ללא עצירה
     mov ah, 01h
