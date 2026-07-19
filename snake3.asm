@@ -224,6 +224,14 @@ not_esc:
     je set_left
     cmp ah, 4Dh           ; חץ ימינה
     je set_right
+	cmp al, 'w'
+	je set_up
+	cmp al, 's'
+	je set_down
+	cmp al, 'a'
+	je set_left
+	cmp al, 'd'
+	je set_right
     jmp continue_game     ; מקש אחר - התעלם
 
 set_up:    
